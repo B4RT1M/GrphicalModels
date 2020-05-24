@@ -1,1 +1,1 @@
-# GrphicalModels
+# GraphicalModels

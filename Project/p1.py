@@ -95,33 +95,41 @@ estimated_state_list12 = []
 estimated_state_list13 = []
 estimated_state_list23 = []
 
-# use last state estimation for new state estimation
-z = z_12_node.update_prior(z_12_msg)
-add_function12_node.port_c.update(z)
-d = D_12_node.port_a.update(D_12)
-add_function12_node.port_b.update(d)
-add_function12_node.port_a.update(z+d)
-B_12_node.port_a.update(z+d)
-b = B_12_node.port_b.update((z-d)/B_12)
-equality_node.ports[1].update(b)
+#for  in ():
+print('z_12', z_12, 'z_12_msg',z_12_msg, 'D_12', D_12, 'x_d_msg', x_d_msg)
+meas_var2 = 0.1**2
+D_12_msg = GaussianMeanCovMessage(np.atleast_2d(D_12), [[meas_var2]])
+z_12_node.update_prior(z_12_msg)
+D_12_node.update_prior(D_12_msg)
+#add_function12_node.port_a.update(GaussianMeanCovMessage)
+add_function12_node.port_a.update(GaussianWeightedMeanInfoMessage)
+#B_12_node.port_a.update(GaussianWeightedMeanInfoMessage)
+B_12_node.port_a.update()
+#add_input_node.port_c.update()
+#equality_node.ports[1].update()
+#equality_node.ports[0].update(x_d_msg)
 
-z = z_13_node.update_prior(z_13_msg)
-add_function13_node.port_c.update(z)
-d = D_13_node.port_a.update(D_13)
-add_function13_node.port_b.update(d)
-add_function13_node.port_a.update(z+d)
-B_13_node.port_a.update(z+d)
-b = B_13_node.port_b.update((z-d)/B_13)
-equality_node.ports[2].update(b)
+meas_var2 = 0.1**2
+D_13_msg = GaussianMeanCovMessage(np.atleast_2d(D_13), [[meas_var2]])
+z_13_node.update_prior(z_13_msg)
+D_13_node.update_prior(D_13_msg)
+add_function13_node.port_a.update(GaussianWeightedMeanInfoMessage)
+B_13_node.port_a.update()
+#equality_node.ports[0].update()
+#equality_node.ports[0].update(x_d_msg)
 
-z = z_23_node.update_prior(z_23_msg)
-add_function23_node.port_c.update(z)
-d = D_23_node.port_a.update(D_23)
-add_function23_node.port_b.update(d)
-add_function23_node.port_a.update(z+d)
-B_23_node.port_a.update(z+d)
-b = B_23_node.port_b.update((z-d)/B_23)
-equality_node.ports[3].update(b)
+meas_var2 = 0.1**2
+D_23_msg = GaussianMeanCovMessage(np.atleast_2d(D_23), [[meas_var2]])
+z_23_node.update_prior(z_23_msg)
+D_23_node.update_prior(D_23_msg)
+add_function23_node.port_a.update(GaussianWeightedMeanInfoMessage)
+B_23_node.port_a.update()
+#equality_node.ports[0].update()
+#equality_node.ports[0].update(x_d_msg)
 
-equality_node.ports[0].update(x_d_msg)
+equality_node.ports[0].update()
+print ('x_d_msg', x_d_msg)
+#equality_node.ports[0].update(x_d_msg)
+
+
 

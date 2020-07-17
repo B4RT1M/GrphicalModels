@@ -8,6 +8,16 @@ from ime_fgs.utils import col_vec, row_vec
 
 
 def plot_pos(Anchor1, Anchor2, Anchor3, X_est, X_real):
+    '''
+    Function to plot the environment
+    
+    @input: 
+        Anchor1: the pos of the first Anchor
+        Anchor2: the pos of the second Anchor
+        Anchor3: the pos of the third Anchor
+        X_est: the estimated pos of the drone
+        X_real: the real pos of the drone
+    '''
     plt.plot([Anchor1[0], Anchor2[0], Anchor3[0]], [Anchor1[1], Anchor1[2], Anchor1[3]], 'ro')
     plt.plot([X_real[0]], [X_real[1]], 'go')
     plt.plot([X_est[0]], [X_est[1]], 'bo')
@@ -16,6 +26,17 @@ def plot_pos(Anchor1, Anchor2, Anchor3, X_est, X_real):
     plt.show()
 
 def calculate_error(X_est, X_real):
+    '''
+    Function to calculate the error between an estimated 2d pos 
+    and the real 2d pos
+    
+    @input: 
+        X_est: the estimated position of dim: 1 x 2
+        X_real: the real position of dim: 1 x 2
+        
+    @output:
+        error: a scalar error feedback
+    '''
     errors = np.absolute(X_real - X_est)
     error = errors[0] + errors[1]
     
@@ -23,6 +44,8 @@ def calculate_error(X_est, X_real):
 
 def plot_error(iterations, error):
     '''
+    Function to plot error calculations over some iterations
+    
     @input 
         iterations: number of iterations
         error: error vector of dim: num_iterations x 1

@@ -7,6 +7,32 @@ from ime_fgs.plot import draw_graph
 from ime_fgs.utils import col_vec, row_vec
 
 
+def plot_pos(Anchor1, Anchor2, Anchor3, X_est, X_real):
+    plt.plot([Anchor1[0], Anchor2[0], Anchor3[0]], [Anchor1[1], Anchor1[2], Anchor1[3]], 'ro')
+    plt.plot([X_real[0]], [X_real[1]], 'go')
+    plt.plot([X_est[0]], [X_est[1]], 'bo')
+    plt.axis([0, 6, 0, 20])
+    plt.legend('Anchors','Real Position', 'Estimated Pos')
+    plt.show()
+
+def calculate_error(X_est, X_real):
+    errors = np.absolute(X_real - X_est)
+    error = errors[0] + errors[1]
+    
+    return error
+
+def plot_error(iterations, error):
+    '''
+    @input 
+        iterations: number of iterations
+        error: error vector of dim: num_iterations x 1
+    '''
+    iteration = np.linspace(0,iterations)
+    plt.plot(iteration, error, color = 'r')
+    plt.xlabel('iteration')
+    plt.ylabel('error')
+    plt.show()
+
 def calculate_dist(x_d, x_A1, x_A2, x_A3):
     z_12 = np.linalg.norm(x_A1-x_d)- np.linalg.norm(x_A2-x_d)
     z_13 = np.linalg.norm(x_A1-x_d)- np.linalg.norm(x_A3-x_d)

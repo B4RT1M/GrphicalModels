@@ -7,6 +7,13 @@ from ime_fgs.plot import draw_graph
 from ime_fgs.utils import col_vec, row_vec
 
 
+def generate_msg(z_12, z_13, z_23, meas_var):
+    z_12_msg = GaussianMeanCovMessage(np.atleast_2d(z_12), [[meas_var]])
+    z_13_msg = GaussianMeanCovMessage(np.atleast_2d(z_13), [[meas_var]])
+    z_23_msg = GaussianMeanCovMessage(np.atleast_2d(z_23), [[meas_var]])
+    
+    return z_12_msg, z_13_msg, z_23_msg
+
 def plot_pos(Anchor1, Anchor2, Anchor3, X_est, X_real):
     '''
     Function to plot the environment
@@ -117,9 +124,7 @@ if __name__ == "__main__":
     #Sample noise for each measurement
     z_12, z_13, z_23 = add_noise(meas_var, z_12, z_13, z_23)
     
-    z_12_msg = GaussianMeanCovMessage(np.atleast_2d(z_12), [[meas_var]])
-    z_13_msg = GaussianMeanCovMessage(np.atleast_2d(z_13), [[meas_var]])
-    z_23_msg = GaussianMeanCovMessage(np.atleast_2d(z_23), [[meas_var]])
+    z_12_msg, z_13_msg, z_23_msg = generate_msg(z_12, z_13, z_23, meas_var)
     
     pos_var = 1 * np.eye(2)
     x_d0 = x_d + np.random.multivariate_normal([0, 0], pos_var)
@@ -151,7 +156,7 @@ if __name__ == "__main__":
     x_d_msg_est_list = []
     
     #for  in ():
-    print('z_12', z_12, 'z_12_msg',z_12_msg, 'D_12', D_12, 'x_d_msg', x_d_msg)
+    #print('z_12', z_12, 'z_12_msg',z_12_msg, 'D_12', D_12, 'x_d_msg', x_d_msg)
     for i in range(10):
         
         D_12_msg = GaussianMeanCovMessage(np.atleast_2d(D_12), [[0]])
@@ -173,8 +178,13 @@ if __name__ == "__main__":
         B_23_node.port_a.update()
     
         
-        x = equality_node.ports[0].update()
-        x = equality_node.ports[0].marginal(GaussianMeanCovMessage)
-        x_d_msg = x
-        x_d_msg_est_list.append(x)
+        equality_node.ports[0].update()
+        
+        x_d_node = equality_node.ports[0]
+        X_est = equality_node.ports[0].marginal(GaussianMeanCovMessage).mean
+        x_d_msg_est_list.append(X_est)
+        z_12,z_13,z_23 = calculate_dist(X_est, x_A1, x_A2, x_A3)
+        z_12_msg, z_13_msg, z_23_msg = generate_msg(z_12, z_13, z_23, 0)
+        
+        print(equality_node.ports[0].marginal(GaussianMeanCovMessage).mean)
     

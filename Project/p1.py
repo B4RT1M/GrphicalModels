@@ -25,11 +25,12 @@ def plot_pos(Anchor1, Anchor2, Anchor3, X_est, X_real):
         X_est: the estimated pos of the drone
         X_real: the real pos of the drone
     '''
-    plt.plot([Anchor1[0], Anchor2[0], Anchor3[0]], [Anchor1[1], Anchor1[2], Anchor1[3]], 'ro')
-    plt.plot([X_real[0]], [X_real[1]], 'go')
-    plt.plot([X_est[0]], [X_est[1]], 'bo')
-    plt.axis([0, 6, 0, 20])
-    plt.legend('Anchors','Real Position', 'Estimated Pos')
+    fig = plt.figure()
+    plt.plot([Anchor1[0], Anchor2[0], Anchor3[0]], [Anchor1[1], Anchor2[1], Anchor3[1]], 'ro', label = 'Anchors')
+    plt.plot([X_real[0]], [X_real[1]], 'go', label = 'Real Position')
+    plt.plot([X_est[0]], [X_est[1]], 'bo', label = 'Estimated position')
+    #plt.axis([0, 6, 0, 20])
+    plt.legend()
     plt.show()
 
 def calculate_error(X_est, X_real):
@@ -57,6 +58,7 @@ def plot_error(iterations, error):
         iterations: number of iterations
         error: error vector of dim: num_iterations x 1
     '''
+    fig = plt.figure()
     iteration = np.linspace(0,iterations)
     plt.plot(iteration, error, color = 'r')
     plt.xlabel('iteration')
@@ -183,6 +185,7 @@ if __name__ == "__main__":
         x_d_node = equality_node.ports[0]
         X_est = equality_node.ports[0].marginal(GaussianMeanCovMessage).mean
         x_d_msg_est_list.append(X_est)
+        plot_pos(x_A1, x_A2, x_A3, X_est, x_d)
         z_12,z_13,z_23 = calculate_dist(X_est, x_A1, x_A2, x_A3)
         z_12_msg, z_13_msg, z_23_msg = generate_msg(z_12, z_13, z_23, 0)
         

@@ -25,7 +25,7 @@ def plot_pos(Anchor1, Anchor2, Anchor3, X_est, X_real):
         X_est: the estimated pos of the drone
         X_real: the real pos of the drone
     '''
-    fig = plt.figure()
+    plt.figure()
     plt.plot([Anchor1[0], Anchor2[0], Anchor3[0]], [Anchor1[1], Anchor2[1], Anchor3[1]], 'ro', label = 'Anchors')
     plt.plot([X_real[0]], [X_real[1]], 'go', label = 'Real Position')
     plt.plot([X_est[0]], [X_est[1]], 'bo', label = 'Estimated position')
@@ -58,8 +58,8 @@ def plot_error(iterations, error):
         iterations: number of iterations
         error: error vector of dim: num_iterations x 1
     '''
-    fig = plt.figure()
     iteration = np.linspace(0,iterations)
+    plt.figure()
     plt.plot(iteration, error, color = 'r')
     plt.xlabel('iteration')
     plt.ylabel('error')
